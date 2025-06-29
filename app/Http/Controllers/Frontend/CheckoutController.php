@@ -28,6 +28,7 @@ class CheckoutController extends Controller
         $data['carts'] = $this->cartService->getUserCart();
         $data['provinces'] = $this->rajaongkirService->getProvince();
         $data['shipping_address'] = ShippingAddress::first();
+        $data['user_point'] = auth()->user()->point;
         return view('frontend.checkout.index',compact('data'));
     }
 

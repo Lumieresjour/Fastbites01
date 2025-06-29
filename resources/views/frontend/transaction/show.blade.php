@@ -111,6 +111,15 @@
                                                     </div>
                                                 </address>
                                             @endif
+                                            @if($data['order']->point_used > 0)
+                                                <address>
+                                                    <strong>Point Used:</strong>
+                                                    <div class="mt-2">
+                                                        <p class="section-lead text-uppercase">
+                                                            {{ number_format($data['order']->point_used) }} point ({{ rupiah($data['order']->point_discount) }} discount)</p>
+                                                    </div>
+                                                </address>
+                                            @endif
                                         </div>
                                         <div class="col-lg-4 text-right">
                                             <div class="invoice-detail-item">
@@ -118,6 +127,14 @@
                                                 <div class="invoice-detail-value">{{ rupiah($data['order']->subtotal) }}
                                                 </div>
                                             </div>
+                                            @if($data['order']->point_discount > 0)
+                                            <div class="invoice-detail-item">
+                                                <div class="invoice-detail-name">Point Discount</div>
+                                                <div class="invoice-detail-value" style="color: #28a745;">
+                                                    -{{ rupiah($data['order']->point_discount) }}
+                                                </div>
+                                            </div>
+                                            @endif
                                             <div class="invoice-detail-item">
                                                 <div class="invoice-detail-name">{{ __('text.shipping_cost') }}</div>
                                                 <div class="invoice-detail-value">
@@ -184,6 +201,20 @@
                                                 </div>
                                             </div>
                                         @endforeach
+                                        
+                                        <!-- Bonus Point Info -->
+                                        <div class="activity">
+                                            <div class="activity-icon bg-success text-white shadow-success">
+                                                <i class="fas fa-gift"></i>
+                                            </div>
+                                            <div class="activity-detail bg-success text-white">
+                                                <div class="mb-2">
+                                                    <span class="text-job text-white">{{ $data['order']->created_at->diffForHumans() }}</span>
+                                                    <span class="bullet"></span>
+                                                </div>
+                                                <p>🎁 You earned 5 bonus points for this order!</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -21,7 +21,19 @@ class CheckoutService{
     {
         $userCart = $this->cartService->getUserCart();
         $subtotal =  $userCart->sum('total_price_per_product');
-        $total_pay = $subtotal + $request['shipping_cost']; 
+        
+        // Hitung diskon point (1 point = 1000)
+        $point_used = isset($request['point_used']) ? (int)$request['point_used'] : 0;
+        $point_discount = $point_used * 1000;
+        
+        // Pastikan diskon tidak melebihi subtotal
+        if ($point_discount > $subtotal) {
+            $point_discount = $subtotal;
+            $point_used = floor($subtotal / 1000);
+        }
+        
+        $total_pay = $subtotal - $point_discount + $request['shipping_cost']; 
+        
         $dataOrder = [
             'invoice_number' => strtoupper(Str::random('6')),
             'total_pay' => $total_pay,
@@ -33,10 +45,14 @@ class CheckoutService{
             'shipping_cost' => $request['shipping_cost'],
             'shipping_method' => $request['shipping_method'],
             'total_weight' => $request['total_weight'],
+            'point_used' => $point_used,
+            'point_discount' => $point_discount,
             'status' => 0,
             'user_id' => auth()->user()->id
         ];
+        
         $orderStore = $this->order->store($dataOrder);
+        
         foreach($userCart as $cart){
             $this->orderDetail->store([
                 'order_id' => $orderStore->id,
@@ -44,6 +60,12 @@ class CheckoutService{
                 'qty' => $cart->qty
             ]);
         }
+        
+        // Update point user (kurangi point yang digunakan, tambah 5 point bonus)
+        $user = auth()->user();
+        $user->point = $user->point - $point_used + 5;
+        $user->save();
+        
         $this->cartService->deleteUserCart();
     }
 

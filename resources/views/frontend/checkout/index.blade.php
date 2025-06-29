@@ -101,16 +101,33 @@
                                     </li>
                                 </ul>
                             </div>
+                            
+                            <!-- Point Section -->
+                            <div class="checkout__order__point" style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+                                <h6 style="margin-bottom: 10px; color: #333;">💎 Point Reward</h6>
+                                <div style="margin-bottom: 10px;">
+                                    <small style="color: #666;">Available Point: <strong>{{ number_format($data['user_point']) }}</strong></small><br>
+                                    <small style="color: #666;">1 Point = Rp 1,000</small><br>
+                                    <small style="color: #28a745;">🎁 Get 5 bonus points after order!</small>
+                                </div>
+                                <div class="checkout__form__input">
+                                    <p style="margin-bottom: 5px;">Use Point <small>(Optional)</small></p>
+                                    <input type="number" name="point_used" id="point_used" min="0" max="{{ $data['user_point'] }}" value="0" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
+                                    <small style="color: #666;">Max: {{ number_format($data['user_point']) }} point</small>
+                                </div>
+                            </div>
+                            
                             <div class="checkout__order__total">
                                 <ul>
                                     <li>Subtotal <span>{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span>
                                     </li>
+                                    <li>Point Discount <span id="point-discount">Rp 0</span></li>
                                     <li>Shipping Cost <span id="text-cost">Rp 0</span></li>
                                     <li>Total <span id="total">{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span></li>
                                     <input type="hidden" name="shipping_cost" id="shipping_cost" >
                                 </ul>
                             </div>
-                            <button type="submit" class="site-btn">Place oder</button>
+                            <button type="submit" class="site-btn">Place order</button>
                         </div>
                     </div>
                 </div>
@@ -203,12 +220,45 @@
             countCost(ongkir);
         })
 
+        // Point calculation
+        $('#point_used').on('input', function() {
+            calculateTotal();
+        });
+
+        function calculateTotal() {
+            var subtotal = parseInt(`{{ $data['carts']->sum('total_price_per_product') }}`);
+            var pointUsed = parseInt($('#point_used').val()) || 0;
+            var pointDiscount = pointUsed * 1000;
+            var shippingCost = parseInt($('#shipping_cost').val()) || 0;
+            
+            // Pastikan diskon tidak melebihi subtotal
+            if (pointDiscount > subtotal) {
+                pointDiscount = subtotal;
+                $('#point_used').val(Math.floor(subtotal / 1000));
+            }
+            
+            var total = subtotal - pointDiscount + shippingCost;
+            
+            $('#point-discount').text(rupiah(pointDiscount));
+            $('#total').text(rupiah(total));
+        }
+
         function countCost(ongkir)
         {
             var subtotal = `{{ $data['carts']->sum('total_price_per_product') }}`;
-            var total = parseInt(subtotal) + ongkir;
+            var pointUsed = parseInt($('#point_used').val()) || 0;
+            var pointDiscount = pointUsed * 1000;
+            
+            // Pastikan diskon tidak melebihi subtotal
+            if (pointDiscount > subtotal) {
+                pointDiscount = subtotal;
+                $('#point_used').val(Math.floor(subtotal / 1000));
+            }
+            
+            var total = parseInt(subtotal) - pointDiscount + ongkir;
             $('#text-cost').text(rupiah(ongkir));
             $('#shipping_cost').val(ongkir);
+            $('#point-discount').text(rupiah(pointDiscount));
             $('#total').text(rupiah(total))
         }
     </script>
