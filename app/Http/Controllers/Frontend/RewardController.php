@@ -9,6 +9,10 @@ class RewardController extends Controller
 {
     public function index()
     {
-        return view('frontend.reward.index');
+        $data = [];
+        if (auth()->check()) {
+            $data['user_point'] = auth()->user()->point;
+        }
+        return view('frontend.reward.index', compact('data'));
     }
 }

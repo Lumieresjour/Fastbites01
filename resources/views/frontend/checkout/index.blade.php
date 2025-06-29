@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__links">
-                        <a href="{{ url('/') }}"><i class="fa fa-home"></i> Home</a>
+                        <a href="{{ url('/') }}"><i class="fa fa-home"></i> Beranda</a>
                         <span>Checkout</span>
                     </div>
                 </div>
@@ -21,25 +21,25 @@
                 @csrf
                 <div class="row">
                     <div class="col-lg-8 mb-4">
-                        <h5>Billing detail</h5>
+                        <h5>Detail Pengiriman</h5>
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="checkout__form__input">
-                                    <p>Recipient Name <span>*</span></p>
+                                    <p>Nama Penerima <span>*</span></p>
                                     <input type="text" name="recipient_name" value="{{ auth()->user()->name }}" required>
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="checkout__form__input">
-                                    <p>Phone Number <span>*</span></p>
+                                    <p>Nomor Telepon <span>*</span></p>
                                     <input type="text" name="phone_number"  required>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="checkout__form__input">
-                                    <p>Province <span>*</span></p>
+                                    <p>Provinsi <span>*</span></p>
                                     <select name="province_id" id="province_id" class="select-2" required>
-                                        <option value="" selected disabled>-- Select Province --</option>
+                                        <option value="" selected disabled>-- Pilih Provinsi --</option>
                                         @foreach ($data['provinces'] as $province)
                                             <option value="{{ $province['province'] }}" data-id="{{ $province['province_id'] }}">{{ $province['province'] }}
                                             </option>
@@ -49,21 +49,21 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="checkout__form__input">
-                                    <p>City <span>*</span></p>
+                                    <p>Kota <span>*</span></p>
                                     <select name="city_id" id="city_id" class="select-2" disabled required>
-                                        <option value="" selected disabled>-- Select City --</option>
+                                        <option value="" selected disabled>-- Pilih Kota --</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="checkout__form__input">
-                                    <p>Address Detail <span>*</span></p>
+                                    <p>Detail Alamat <span>*</span></p>
                                     <input type="text" name="address_detail" required>
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="checkout__form__input">
-                                    <p>Courier <span>*</span></p>
+                                    <p>Kurir <span>*</span></p>
                                     <select name="courier" id="courier">
                                         <option value="jne" selected>Gofood</option>
                                         <option value="tiki">Grabfood</option>
@@ -73,7 +73,7 @@
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="checkout__form__input">
-                                    <p>Shipment Method <span>*</span></p>
+                                    <p>Metode Pengiriman <span>*</span></p>
                                     <select name="shipping_method" id="shipping_method" required>
                                     </select>
                                 </div>
@@ -82,11 +82,11 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="checkout__order">
-                            <h5>Your order</h5>
+                            <h5>Pesanan Anda</h5>
                             <div class="checkout__order__product">
                                 <ul>
                                     <li>
-                                        <span class="top__text">Product</span>
+                                        <span class="top__text">Produk</span>
                                         <span class="top__text__right">Total</span>
                                     </li>
                                     @foreach ($data['carts'] as $cart)
@@ -95,7 +95,7 @@
                                         </li>
                                     @endforeach
                                     <li>
-                                        <span class="top__text">Total Weight</span>
+                                        <span class="top__text">Total Berat</span>
                                         <span class="top__text__right">{{ $data['carts']->sum('total_weight_per_product') / 1000 }} Kg</span>
                                         <input type="hidden" name="total_weight" id="total_weight" value="{{ $data['carts']->sum('total_weight_per_product') }}">
                                     </li>
@@ -104,30 +104,30 @@
                             
                             <!-- Point Section -->
                             <div class="checkout__order__point" style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 5px;">
-                                <h6 style="margin-bottom: 10px; color: #333;">💎 Point Reward</h6>
+                                <h6 style="margin-bottom: 10px; color: #333;">💎 {{ __('text.point_reward') }}</h6>
                                 <div style="margin-bottom: 10px;">
-                                    <small style="color: #666;">Available Point: <strong>{{ number_format($data['user_point']) }}</strong></small><br>
-                                    <small style="color: #666;">1 Point = Rp 1,000</small><br>
-                                    <small style="color: #28a745;">🎁 Get 5 bonus points after order!</small>
+                                    <small style="color: #666;">{{ __('text.available_point') }}: <strong>{{ number_format($data['user_point']) }}</strong></small><br>
+                                    <small style="color: #666;">{{ __('text.point_conversion') }}</small><br>
+                                    <small style="color: #28a745;">🎁 {{ __('text.get_bonus_point') }}</small>
                                 </div>
                                 <div class="checkout__form__input">
-                                    <p style="margin-bottom: 5px;">Use Point <small>(Optional)</small></p>
+                                    <p style="margin-bottom: 5px;">{{ __('text.use_point') }} <small>{{ __('text.point_optional') }}</small></p>
                                     <input type="number" name="point_used" id="point_used" min="0" max="{{ $data['user_point'] }}" value="0" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
-                                    <small style="color: #666;">Max: {{ number_format($data['user_point']) }} point</small>
+                                    <small style="color: #666;">{{ __('text.max_point') }}: {{ number_format($data['user_point']) }} point</small>
                                 </div>
                             </div>
                             
                             <div class="checkout__order__total">
                                 <ul>
-                                    <li>Subtotal <span>{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span>
+                                    <li>Sub Total <span>{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span>
                                     </li>
-                                    <li>Point Discount <span id="point-discount">Rp 0</span></li>
-                                    <li>Shipping Cost <span id="text-cost">Rp 0</span></li>
-                                    <li>Total <span id="total">{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span></li>
+                                    <li>{{ __('text.point_discount') }} <span id="point-discount">Rp 0</span></li>
+                                    <li>{{ __('text.shipping_cost') }} <span id="text-cost">Rp 0</span></li>
+                                    <li>Total Bayar <span id="total">{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span></li>
                                     <input type="hidden" name="shipping_cost" id="shipping_cost" >
                                 </ul>
                             </div>
-                            <button type="submit" class="site-btn">Place order</button>
+                            <button type="submit" class="site-btn">Buat Pesanan</button>
                         </div>
                     </div>
                 </div>

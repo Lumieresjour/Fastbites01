@@ -6,8 +6,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__links">
-                        <a href="{{ url('/') }}"><i class="fa fa-home"></i> Home</a>
-                        <a href="{{ route('transaction.index') }}"> Transaction</a>
+                        <a href="{{ url('/') }}"><i class="fa fa-home"></i> Beranda</a>
+                        <a href="{{ route('transaction.index') }}"> Transaksi</a>
                         <span>{{ $data['order']->invoice_number }}</span>
                     </div>
                 </div>
@@ -113,23 +113,23 @@
                                             @endif
                                             @if($data['order']->point_used > 0)
                                                 <address>
-                                                    <strong>Point Used:</strong>
+                                                    <strong>{{ __('text.point_used') }}:</strong>
                                                     <div class="mt-2">
                                                         <p class="section-lead text-uppercase">
-                                                            {{ number_format($data['order']->point_used) }} point ({{ rupiah($data['order']->point_discount) }} discount)</p>
+                                                            {{ number_format($data['order']->point_used) }} point ({{ rupiah($data['order']->point_discount) }} diskon)</p>
                                                     </div>
                                                 </address>
                                             @endif
                                         </div>
                                         <div class="col-lg-4 text-right">
                                             <div class="invoice-detail-item">
-                                                <div class="invoice-detail-name">Subtotal</div>
+                                                <div class="invoice-detail-name">Sub Total</div>
                                                 <div class="invoice-detail-value">{{ rupiah($data['order']->subtotal) }}
                                                 </div>
                                             </div>
                                             @if($data['order']->point_discount > 0)
                                             <div class="invoice-detail-item">
-                                                <div class="invoice-detail-name">Point Discount</div>
+                                                <div class="invoice-detail-name">{{ __('text.point_discount') }}</div>
                                                 <div class="invoice-detail-value" style="color: #28a745;">
                                                     -{{ rupiah($data['order']->point_discount) }}
                                                 </div>
@@ -142,7 +142,7 @@
                                             </div>
                                             <hr class="mt-2 mb-2">
                                             <div class="invoice-detail-item">
-                                                <div class="invoice-detail-name">Total</div>
+                                                <div class="invoice-detail-name">Total Bayar</div>
                                                 <div class="invoice-detail-value invoice-detail-value-lg">
                                                     {{ rupiah($data['order']->total_pay) }}</div>
                                             </div>
@@ -157,17 +157,17 @@
                                 @if ($data['order']->status == 0)
                                     <button class="btn btn-primary btn-icon icon-left" id="pay-button"><i
                                             class="fa fa-credit-card"></i>
-                                        Process Payment</button>
+                                        Proses Pembayaran</button>
                                     <a href="{{ route('transaction.canceled', $data['order']->invoice_number) }}" class="btn btn-danger btn-icon icon-left"><i class="fa fa-times"></i>
-                                        Cancel Order</a>
+                                        Batalkan Pesanan</a>
                                 @elseif ($data['order']->status == 2)
                                     <a href="{{ route('transaction.received', $data['order']->invoice_number) }}"
                                         class="btn btn-primary text-white btn-icon icon-left"><i
                                             class="fa fa-credit-card"></i>
-                                        Order Received</a>
+                                        Pesanan Diterima</a>
                                 @endif
                             </div>
-                            <button class="btn btn-warning btn-icon icon-left"><i class="fa fa-print"></i> Print</button>
+                            <button class="btn btn-warning btn-icon icon-left"><i class="fa fa-print"></i> Cetak</button>
                         </div>
                     </div>
                 </div>
@@ -181,7 +181,7 @@
                 <div class="col-md-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h4 class="card-title">Order Track</h4>
+                            <h4 class="card-title">Lacak Pesanan</h4>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -212,7 +212,7 @@
                                                     <span class="text-job text-white">{{ $data['order']->created_at->diffForHumans() }}</span>
                                                     <span class="bullet"></span>
                                                 </div>
-                                                <p>🎁 You earned 5 bonus points for this order!</p>
+                                                <p>🎁 {{ __('text.get_bonus_point') }}</p>
                                             </div>
                                         </div>
                                     </div>
