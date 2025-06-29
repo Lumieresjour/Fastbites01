@@ -3,6 +3,7 @@ return [
     // GLobal Field
     'name' => 'Nama',
     'email' => 'Email',
+    'point' => 'Point',
     'join_at' => 'Bergabung',
     'slug' => 'Slug',
     'action' => 'Aksi',

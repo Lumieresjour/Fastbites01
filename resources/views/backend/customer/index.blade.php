@@ -12,6 +12,7 @@
                     <tr>
                         <th>{{ __('field.name') }}</th>
                         <th>{{ __('field.email') }}</th>
+                        <th>{{ __('field.point') }}</th>
                         <th>{{ __('field.join_at') }}</th>
                     </tr>
                 @endslot
@@ -20,6 +21,7 @@
                         <tr>
                             <td>{{ $customer->name }}</td>
                             <td>{{ $customer->email }}</td>
+                            <td>{{ number_format($customer->point) }}</td>
                             <td>{{ tanggal($customer->created_at) }}</td>
                         </tr>
                     @endforeach
